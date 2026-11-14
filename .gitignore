@@ -1,0 +1,15 @@
+# Build artifacts
+build/
+ponte
+*.o
+*.d
+*.out
+*.exe
+
+# Editor / OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store

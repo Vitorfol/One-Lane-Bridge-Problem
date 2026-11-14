@@ -23,21 +23,32 @@ Em C++ não existe a palavra-chave `synchronized` do Java. O **Monitor** é cons
 
 ---
 
-## 2. Estrutura de Classes (Visão Inicial — será atualizada a cada etapa)
+## 2. Estrutura de Classes (Atualizado no Passo 1)
 
-- **`Dados`**: Agrega as métricas por cenário executado durante a sessão do programa (incluindo quantidade de `rodadas` por cenário) e calcula o consolidado `Global`, imprimindo a tabela comparativa (contagens por sentido, espera mín/méd/máx em segundos simulados e % de utilização da Ponte Principal e Ponte Antiga — medida pelo intervalo real em que há pelo menos 1 veículo sobre a ponte, evitando soma duplicada quando há múltiplos carros simultâneos).
-- **`Ponte`**: Monitor que controla o acesso concorrente à travessia (direção, capacidade, espaçamento `Ts`, regra de exclusividade para caminhões e alternância sem starvation).
-- **`Veiculo` / `Carro` / `Caminhao`**: Entidades executadas por threads com seus tempos (`Ta`, `Tc`/`Tt`) e lógica de requisição de travessia.
-- **`Simulador` / `main`**: Lê `--escala <fator>` opcional, executa o menu interativo para seleção dos cenários e consolida os resultados em `Dados`.
+- **`Tipos.h`**: Define `Sentido`, `TipoVeiculo`, `TOTAL_CENARIOS` e helpers de conversão temporal (`segundosParaMs`, `msReaisParaSegundosSimulados`).
+- **`Dados` (`Dados.h` / `Dados.cpp`)**: Agrega as métricas por cenário executado durante a sessão (protegida por `std::mutex`), contabiliza `rodadas`, calcula o consolidado `Global` e imprime a tabela comparativa (contagens por sentido, espera mín/méd/máx em segundos simulados e % de utilização da Ponte Principal e Ponte Antiga — medida pelo intervalo real em que há pelo menos 1 veículo sobre a ponte).
+- **`Simulador` (`Simulador.h` / `Simulador.cpp`)** e **`main.cpp`**: Fazem o parse opcional de `--escala <fator>`, conduzem o menu interativo para seleção dos cenários/alteração de escala e consolidam os resultados em `Dados`.
+- **`Ponte`** *(Passos 2–5)*: Monitor que controla o acesso concorrente à travessia (direção, capacidade, espaçamento `Ts`, regra de exclusividade para caminhões e alternância sem starvation).
+- **`Carro` / `Caminhao`** *(Passos 2–5)*: Entidades executadas por threads com seus tempos (`Ta`, `Tc`/`Tt`) e lógica de requisição de travessia.
 
-### Diagrama de Classes (Esboço Inicial)
+### Diagrama de Classes (Estado Atual + Esboço dos Próximos Passos)
 
 ```mermaid
 classDiagram
     class Dados {
-        +registrarVeiculo(...)
-        +registrarUsoPonte(...)
-        +imprimirTabela()
+        -mutex mtx
+        -array~MetricasCenario, 4~ cenarios
+        +registrarVeiculo(cenario, tipo, sentido, esperaSeg)
+        +registrarRodada(cenario, totalSeg, principalSeg, antigaSeg, possuiAntiga)
+        +obterCenario(cenario) MetricasCenario
+        +calcularGlobal() MetricasCenario
+        +imprimirTabela(escalaAtual)
+    }
+
+    class Simulador {
+        -Dados dados
+        -double escala
+        +executarMenu()
     }
 
     class Ponte {
@@ -49,18 +60,18 @@ classDiagram
 
     class Carro {
         -int id
-        -int sentido
+        -Sentido sentido
         +rodar(...)
     }
 
     class Caminhao {
         -int id
-        -int sentido
+        -Sentido sentido
         +rodar(...)
     }
 
     Simulador --> Dados
-    Simulador --> Ponte
+    Simulador ..> Ponte : cria por cenario
     Carro ..> Ponte : atravessa
     Caminhao ..> Ponte : atravessa
 ```

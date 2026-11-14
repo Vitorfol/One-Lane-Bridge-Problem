@@ -1,5 +1,5 @@
 CXX      := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -pthread
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -MMD -MP -pthread
 LDFLAGS  := -pthread
 
 SRC_DIR  := src
@@ -8,6 +8,7 @@ TARGET   := ponte
 
 SRCS     := $(wildcard $(SRC_DIR)/*.cpp)
 OBJS     := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+DEPS     := $(OBJS:.o=.d)
 
 .PHONY: all clean run
 
@@ -23,6 +24,8 @@ $(TARGET): $(OBJS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+-include $(DEPS)
 
 run: $(TARGET)
 	./$(TARGET)

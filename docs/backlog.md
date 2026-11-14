@@ -6,7 +6,7 @@ Referência do enunciado: [problema.md](../problema/problema.md)
 - [x] **Passo 0 — Setup e Organização do Projeto**
   - Estrutura de pastas (`src/`, `docs/`, `.agents/`), `Makefile` com `g++ -pthread`, diretrizes e documentação inicial.
 
-- [ ] **Passo 1 — Fundação: Menu Interativo, Escala de Tempo e Classe `Dados`**
+- [x] **Passo 1 — Fundação: Menu Interativo, Escala de Tempo e Classe `Dados`**
   - CLI aceita `--escala <fator>` opcional (padrão `1.0`, `> 0`) + menu interativo em loop na execução do binário (rodar cenário 1..4, rodar todos, ajustar escala, exibir tabela, sair).
   - Classe `Dados` mantém o histórico da sessão em memória (reinicia ao reiniciar o binário), contando o número de `rodadas` de cada cenário e consolidando a coluna `Global` em tabela:
     1. Rodadas executadas por cenário.
