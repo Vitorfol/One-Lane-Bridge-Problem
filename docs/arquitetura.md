@@ -25,10 +25,10 @@ Em C++ não existe a palavra-chave `synchronized` do Java. O **Monitor** é cons
 
 ## 2. Estrutura de Classes (Visão Inicial — será atualizada a cada etapa)
 
-- **`Dados`**: Agrega as métricas por cenário executado e calcula o consolidado `Global`, imprimindo a tabela final (contagens por sentido, espera mín/méd/máx e % de utilização das pontes).
+- **`Dados`**: Agrega as métricas por cenário executado durante a sessão do programa (incluindo quantidade de `rodadas` por cenário) e calcula o consolidado `Global`, imprimindo a tabela comparativa (contagens por sentido, espera mín/méd/máx em segundos simulados e % de utilização da Ponte Principal e Ponte Antiga — medida pelo intervalo real em que há pelo menos 1 veículo sobre a ponte, evitando soma duplicada quando há múltiplos carros simultâneos).
 - **`Ponte`**: Monitor que controla o acesso concorrente à travessia (direção, capacidade, espaçamento `Ts`, regra de exclusividade para caminhões e alternância sem starvation).
 - **`Veiculo` / `Carro` / `Caminhao`**: Entidades executadas por threads com seus tempos (`Ta`, `Tc`/`Tt`) e lógica de requisição de travessia.
-- **`Simulador` / `main`**: Faz o parse dos argumentos (cenários e `--escala`), instancia os cenários e consolida os resultados em `Dados`.
+- **`Simulador` / `main`**: Lê `--escala <fator>` opcional, executa o menu interativo para seleção dos cenários e consolida os resultados em `Dados`.
 
 ### Diagrama de Classes (Esboço Inicial)
 

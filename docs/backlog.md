@@ -6,12 +6,13 @@ Referência do enunciado: [problema.md](../problema/problema.md)
 - [x] **Passo 0 — Setup e Organização do Projeto**
   - Estrutura de pastas (`src/`, `docs/`, `.agents/`), `Makefile` com `g++ -pthread`, diretrizes e documentação inicial.
 
-- [ ] **Passo 1 — Fundação: CLI, Escala de Tempo e Classe `Dados`**
-  - Leitura de argumentos: seleção de cenário (`1..4` ou `todos`) e escala de tempo (`--escala <fator>`, padrão `1.0`, onde `0.5` reduz `1000ms` para `500ms`).
-  - Estrutura da classe `Dados` para registrar métricas por cenário e consolidar a coluna `Global` em tabela:
-    1. Quantidade de carros e caminhões por sentido (`N->S` e `S->N`).
-    2. Tempo mínimo, máximo e médio de espera na fila.
-    3. Taxa de utilização da(s) ponte(s) (`tempo utilizado / tempo total`).
+- [ ] **Passo 1 — Fundação: Menu Interativo, Escala de Tempo e Classe `Dados`**
+  - CLI aceita `--escala <fator>` opcional (padrão `1.0`, `> 0`) + menu interativo em loop na execução do binário (rodar cenário 1..4, rodar todos, ajustar escala, exibir tabela, sair).
+  - Classe `Dados` mantém o histórico da sessão em memória (reinicia ao reiniciar o binário), contando o número de `rodadas` de cada cenário e consolidando a coluna `Global` em tabela:
+    1. Rodadas executadas por cenário.
+    2. Quantidade de carros e caminhões por sentido (`N->S` e `S->N`).
+    3. Tempo mínimo, máximo e médio de espera na fila (em segundos simulados).
+    4. Taxa de utilização da Ponte Principal e da Ponte Antiga (`tempo com >= 1 veículo / tempo total`).
 
 - [ ] **Passo 2 — Etapa 1: Somente Carros**
   - `n = 100` carros (`50` em cada sentido), `Ta = 1..3s`, `Tc = 5s`, `Ts = 1s` (máximo 5 carros simultâneos).
